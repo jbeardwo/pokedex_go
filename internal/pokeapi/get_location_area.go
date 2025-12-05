@@ -6,21 +6,28 @@ import (
 	"io"
 )
 
-func (c Client) GetLocationAreas(url string) (*LocationAreaResponse, error) {
-	res, err := c.httpClient.Get(url)
-	if err != nil {
-		return &LocationAreaResponse{}, err
+func (c *Client) GetLocationAreas(url string) (*LocationAreaResponse, error) {
+	data, ok := c.pokeCache.Get(url)
+	if !ok {
+		res, err := c.httpClient.Get(url)
+		if err != nil {
+			return &LocationAreaResponse{}, err
+		}
+		data, err = io.ReadAll(res.Body)
+		res.Body.Close()
+		if res.StatusCode > 299 {
+			return &LocationAreaResponse{}, fmt.Errorf("Status Code: %v", res.StatusCode)
+		}
+		if err != nil {
+			return &LocationAreaResponse{}, err
+		}
+		c.pokeCache.Add(url, data)
 	}
-	body, err := io.ReadAll(res.Body)
-	res.Body.Close()
-	if res.StatusCode > 299 {
-		return &LocationAreaResponse{}, fmt.Errorf("Status Code: %v", res.StatusCode)
-	}
+	locationRes := &LocationAreaResponse{}
+	err := json.Unmarshal(data, &locationRes)
 	if err != nil {
 		return &LocationAreaResponse{}, err
 	}
 
-	locationRes := &LocationAreaResponse{}
-	err = json.Unmarshal(body, &locationRes)
 	return locationRes, nil
 }

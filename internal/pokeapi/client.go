@@ -3,14 +3,18 @@ package pokeapi
 import (
 	"net/http"
 	"time"
+
+	"github.com/jbeardwo/pokedex_go/internal/pokecache"
 )
 
 type Client struct {
 	httpClient http.Client
+	pokeCache  pokecache.Cache
 }
 
 func NewClient(timeout time.Duration) Client {
 	return Client{
-		http.Client{Timeout: timeout},
+		httpClient: http.Client{Timeout: timeout},
+		pokeCache:  *pokecache.NewCache(10 * time.Minute),
 	}
 }
