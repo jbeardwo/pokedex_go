@@ -2,16 +2,14 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/jbeardwo/pokedex_go/internal/pokeapi"
 )
 
-func commandMap(cfg *Config) error {
+func commandMap(cfg *config) error {
 	url := "https://pokeapi.co/api/v2/location-area/"
 	if cfg.Next != nil {
 		url = *cfg.Next
 	}
-	locationAreaResponse, err := pokeapi.GetLocationAreas(url)
+	locationAreaResponse, err := cfg.pokeapiClient.GetLocationAreas(url)
 	if err != nil {
 		return fmt.Errorf("error: %v", err)
 	}

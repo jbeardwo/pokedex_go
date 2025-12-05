@@ -4,21 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"net/http"
 )
 
-type LocationAreaResponse struct {
-	Count    int     `json:"count"`
-	Next     *string `json:"next"`
-	Previous *string `json:"previous"`
-	Results  []struct {
-		Name string `json:"name"`
-		URL  string `json:"url"`
-	} `json:"results"`
-}
-
-func GetLocationAreas(url string) (*LocationAreaResponse, error) {
-	res, err := http.Get(url)
+func (c Client) GetLocationAreas(url string) (*LocationAreaResponse, error) {
+	res, err := c.httpClient.Get(url)
 	if err != nil {
 		return &LocationAreaResponse{}, err
 	}
