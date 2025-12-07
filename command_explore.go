@@ -10,14 +10,14 @@ func commandExplore(cfg *config, words []string) error {
 	area := words[1]
 	url += area
 
-	fmt.Println("Exploring ", area, "...")
+	fmt.Printf("Exploring %v...", area)
 	ExploreAreaResponse, err := cfg.pokeapiClient.GetExploreArea(url)
 	if err != nil {
 		return fmt.Errorf("error: %v", err)
 	}
 	fmt.Println("Found Pokemon:")
 	for _, encounter := range ExploreAreaResponse.PokemonEncounters {
-		fmt.Println("- ", encounter.Pokemon.Name)
+		fmt.Println("-", encounter.Pokemon.Name)
 	}
 	fmt.Println()
 

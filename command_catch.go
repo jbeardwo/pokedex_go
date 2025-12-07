@@ -17,15 +17,15 @@ func commandCatch(cfg *config, words []string) error {
 	if err != nil {
 		return fmt.Errorf("error: %v", err)
 	}
-	fmt.Println("Throwing a Pokeball at ", pokemon.Name, "...")
+	fmt.Printf("Throwing a Pokeball at %v...\n", pokemon.Name)
 	catchProbability := getCatchProbability(float64(pokemon.BaseExperience))
 	catchRoll := rand.Float64()
 
 	if catchRoll < catchProbability {
-		fmt.Println(pokemon.Name, " was caught!")
+		fmt.Printf("%v was caught!\n", pokemon.Name)
 		cfg.pokeDex[pokemon.Name] = *pokemon
 	} else {
-		fmt.Println(pokemon.Name, " escaped!")
+		fmt.Printf("%v escaped!\n", pokemon.Name)
 	}
 
 	return nil
