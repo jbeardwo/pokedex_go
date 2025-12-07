@@ -5,7 +5,8 @@ import (
 	"fmt"
 )
 
-func commandMapB(cfg *config) error {
+func commandMapB(cfg *config, words []string) error {
+	_ = words
 	if cfg.Previous == nil {
 		return errors.New("you're on the first page")
 	}
